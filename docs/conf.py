@@ -1,0 +1,11 @@
+project = 'dida.avidclam.com'
+copyright = '2019, Александр Михайлов'
+author = 'Александр Михайлов'
+release = '0.1.0'
+master_doc = 'index'
+extensions = []
+templates_path = ['_templates']
+language = 'ru'
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+html_theme = 'sphinx_rtd_theme'
+html_static_path = ['_static']
