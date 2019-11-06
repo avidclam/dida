@@ -1,4 +1,4 @@
-Auto\ **dida**\ct's Notes
+Auto\ *dida*\ct's Notes
 ====================
 
 Записки самоучки.
