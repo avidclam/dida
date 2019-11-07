@@ -6,6 +6,6 @@ master_doc = 'index'
 extensions = []
 templates_path = ['_templates']
 language = 'ru'
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build']
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
