@@ -84,7 +84,7 @@
 
 На вопрос "Separate source and build directories (y/n) [n]:" ответить n.
 
-Получившийся файл ``conf.py`` подправить так, чтобы получился примерно такой, как ниже в разделе `Файлы`_.
+Получившийся файл ``conf.py`` подправить по образцу, см. `Файлы`_.
 
 Файлы
 ++++++++++
@@ -94,6 +94,17 @@
 conf.py
 *******
 
-.. literalinclude :: conf.py
-   :language: python
+.. code-block:: python
+
+    project = 'Project Name'
+    copyright = '2019, Project Author'
+    author = 'Project Author'
+    release = '0.1.0'
+    master_doc = 'index'
+    extensions = []
+    templates_path = ['_templates']
+    language = 'ru'
+    exclude_patterns = ['_build']
+    html_theme = 'sphinx_rtd_theme'
+    html_static_path = ['_static']
 
