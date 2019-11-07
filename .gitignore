@@ -100,10 +100,11 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
+# local directories
 .mypy_cache/
 /.idea/
 /sandbox/
+/log/
 
 # Original versions of files
 *.orig
