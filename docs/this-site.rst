@@ -16,7 +16,7 @@
 - Python + Sphinx + sphinx-rtd-theme
 - Редактор leo
 - livereload
-- git, GitHub, Read the Rocs
+- git, GitHub, Read the Docs
 
 Действия
 ++++++++++++++++
@@ -93,7 +93,7 @@
 Настроить livereload
 *****************************
 
-Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload <https://github.com/lepture/python-livereload>`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный ывеб-доступ к созданному сайту.
+Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload <https://github.com/lepture/python-livereload>`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный веб-доступ к созданному сайту.
 
 После установки пакета командой ``pip install livereload`` нужно, как описано в Readme livereload, создать исполняемый скрипт (см. ниже), допустим, ``bin/livereload`` и запускать его командой::
 

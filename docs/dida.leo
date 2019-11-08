@@ -31,6 +31,7 @@
 <v t="avidclam.20191107163123.1"><vh>Настроить sphinx</vh></v>
 <v t="avidclam.20191107233624.1"><vh>Выбрать редактор</vh></v>
 <v t="avidclam.20191108133333.1"><vh>Настроить livereload</vh></v>
+<v t="avidclam.20191108140816.1"><vh>Настроить Read the Docs</vh></v>
 </v>
 <v t="avidclam.20191107160103.1"><vh>Файлы</vh>
 <v t="avidclam.20191107171459.1"><vh>conf.py</vh></v>
@@ -50,7 +51,7 @@
 <t tx="avidclam.20191107105156.1">- Python + Sphinx + sphinx-rtd-theme
 - Редактор leo
 - livereload
-- git, GitHub, Read the Rocs
+- git, GitHub, Read the Docs
 </t>
 <t tx="avidclam.20191107111310.1"></t>
 <t tx="avidclam.20191107113327.1">Записки самоучки
@@ -176,7 +177,7 @@
 - заметки под @rst this-site объединяются в единый файл this-site.rst, причем заголовки заметок становятся заголовками подразделов
 - некоторые заметки, такие как "Настроить проект на GitHub" --- это клоны заметок, подготовленных во "Фрагментах"
 - генерация rst-файлов происходит по команде ``rst3``, заданной в минибуфере</t>
-<t tx="avidclam.20191108133333.1">Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload &lt;https://github.com/lepture/python-livereload&gt;`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный ывеб-доступ к созданному сайту.
+<t tx="avidclam.20191108133333.1">Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload &lt;https://github.com/lepture/python-livereload&gt;`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный веб-доступ к созданному сайту.
 
 После установки пакета командой ``pip install livereload`` нужно, как описано в Readme livereload, создать исполняемый скрипт (см. ниже), допустим, ``bin/livereload`` и запускать его командой::
 
@@ -186,5 +187,9 @@
 </t>
 <t tx="avidclam.20191108140008.1">.. literalinclude :: ../bin/livereload
    :language: python</t>
+<t tx="avidclam.20191108140816.1">Использование Read the Docs интуитивно. Основные действия по импорту проекта из GitHub проводятся на странице `списка проектов &lt;https://readthedocs.org/dashboard&gt;`_. Полезные возможности хорошо описаны в `документации &lt;https://docs.readthedocs.io/en/stable/&gt;`_:
+
+- `Размещение на своём домене &lt;https://docs.readthedocs.io/en/stable/custom_domains.html&gt;`_
+- `Привязка Google Analytics к сайту &lt;https://docs.readthedocs.io/en/stable/guides/google-analytics.html&gt;`_</t>
 </tnodes>
 </leo_file>
