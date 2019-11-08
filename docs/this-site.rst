@@ -32,9 +32,7 @@
     git config --global user.email "your.email@your-place.com"
     git config --global alias.hist "log --oneline --graph --decorate --all"
 
-На GitHub:
-
-- Create a new repository, 
+На GitHub нажать Create a new repository:
 - выбрать Owner (себя или одну из созданных ранее Организаций), 
 - задать Repository name и Description, 
 - отметить "Initialize this repository with a README", 
@@ -85,6 +83,11 @@
 На вопрос "Separate source and build directories (y/n) [n]:" ответить n.
 
 Получившийся файл ``conf.py`` подправить по образцу, см. `Файлы`_.
+
+Выбрать редактор
+*******************************
+
+Здесь используется :ref:`chapter_leo`, удачный инструмент редактирования документации.
 
 Файлы
 ++++++++++

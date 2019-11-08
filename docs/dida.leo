@@ -7,6 +7,9 @@
 <find_panel_settings/>
 <vnodes>
 <v t="avidclam.20191107104201.2"><vh>@settings</vh>
+<v t="avidclam.20191107232933.1"><vh>@string medium-font-size = 9pt</vh></v>
+<v t="avidclam.20191107232835.1"><vh>@string small-font-size = 8pt</vh></v>
+<v t="avidclam.20191107232544.1"><vh>@string font-size = 9pt </vh></v>
 <v t="avidclam.20191107104237.1"><vh>@bool rst3_call_docutils = False</vh></v>
 <v t="avidclam.20191107111310.1"><vh>@string rst3_write_intermediate_extension = .rst</vh></v>
 </v>
@@ -26,11 +29,13 @@
 <v t="avidclam.20191107162101.1"></v>
 <v t="avidclam.20191107150449.1"></v>
 <v t="avidclam.20191107163123.1"><vh>Настроить sphinx</vh></v>
+<v t="avidclam.20191107233624.1"><vh>Выбрать редактор</vh></v>
 </v>
 <v t="avidclam.20191107160103.1"><vh>Файлы</vh>
-<v t="avidclam.20191107154943.1"></v>
+<v t="avidclam.20191107171459.1"><vh>conf.py</vh></v>
 </v>
 </v>
+<v t="avidclam.20191108073206.1"><vh>@rst leo</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -60,6 +65,7 @@
    :caption: Содержание:
 
    this-site
+   leo
 
 Указатели и поиск
 =================
@@ -90,9 +96,7 @@
     git config --global user.email "your.email@your-place.com"
     git config --global alias.hist "log --oneline --graph --decorate --all"
 
-На GitHub:
-
-- Create a new repository, 
+На GitHub нажать Create a new repository:
 - выбрать Owner (себя или одну из созданных ранее Организаций), 
 - задать Repository name и Description, 
 - отметить "Initialize this repository with a README", 
@@ -127,5 +131,47 @@
 
 Получившийся файл ``conf.py`` подправить по образцу, см. `Файлы`_.
 </t>
+<t tx="avidclam.20191107171459.1">.. code-block:: python
+
+    project = 'Project Name'
+    copyright = '2019, Project Author'
+    author = 'Project Author'
+    release = '0.1.0'
+    master_doc = 'index'
+    extensions = []
+    templates_path = ['_templates']
+    language = 'ru'
+    exclude_patterns = ['_build']
+    html_theme = 'sphinx_rtd_theme'
+    html_static_path = ['_static']</t>
+<t tx="avidclam.20191107232544.1">**Important**: This should be set by each user.</t>
+<t tx="avidclam.20191107232835.1">A small font size used by default in the status area.</t>
+<t tx="avidclam.20191107232933.1">A small font size used by default in the check boxes in the Find tab.</t>
+<t tx="avidclam.20191107233624.1">Здесь используется :ref:`chapter_leo`, удачный инструмент редактирования документации.
+</t>
+<t tx="avidclam.20191108073206.1">.. _chapter_leo:
+
+Редактор Leo
+============
+
+В проекте используется редактор `Leo Editor &lt;https://leoeditor.com&gt;`_. Это довольно специфическая среда редактирования/программирования, обладающая при всей непривычности несколькими привлекательными для данного проекта особенностями:
+
+- Во-первых, Leo написан на python и инсталлируется привычной командой ``pip install leo``. 
+- Во-вторых, вся текстовая часть сайта, с учетом структуры, сохраняется в едином файле (внешние ресурсы --- картинки, pdf-файлы и т.п. --- нужно держать отдельно). 
+- В-третьих, единица редактирования --- не файл, а блок текста (outline). Структура контента хорошо видна, удобно редактировать мелкие фрагменты, а потом собирать из них сайт. Набор rst-файлов, готовых для обработки sphinx, генерируется одной командой. 
+- И наконец, есть "клоны", т.е. синхронно обновляемые блоки, которые могут использоваться независимо. Изменение одного из клонов приводит к автоматическому обновлению соответствующих фрагментов других страниц сайта.
+
+Для примера ниже приводится сриншот панели Outline на момент редактирования главы "Этот сайт".
+
+.. figure:: _static/screenshots/leo.png
+    :align: center
+
+Примечательно следующее:
+
+- под @settings можно переопределять системные параметры, даже такие "глобальные" как размер шрифта
+- rst3_call_docutils = False говорит системе, что использется Sphinx а не docutils
+- заметки под @rst this-site объединяются в единый файл this-site.rst, причем заголовки заметок становятся заголовками подразделов
+- некоторые заметки, такие как "Настроить проект на GitHub" --- это клоны заметок, подготовленных во "Фрагментах"
+- генерация rst-файлов происходит по команде ``rst3``, заданной в минибуфере</t>
 </tnodes>
 </leo_file>
