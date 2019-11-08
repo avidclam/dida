@@ -90,6 +90,17 @@
 
 Здесь используется :ref:`chapter_leo`, удачный инструмент редактирования документации.
 
+Настроить livereload
+*****************************
+
+Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload <https://github.com/lepture/python-livereload>`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный ывеб-доступ к созданному сайту.
+
+После установки пакета командой ``pip install livereload`` нужно, как описано в Readme livereload, создать исполняемый скрипт (см. ниже), допустим, ``bin/livereload`` и запускать его командой::
+
+    ./bin/livereload > ./log/livereload.log &2>1 &
+
+Обновляемый сайт доступен по адресу http://localhost:5500/index.html
+
 Файлы
 ++++++++++
 
@@ -111,4 +122,10 @@ conf.py
     exclude_patterns = ['_build']
     html_theme = 'sphinx_rtd_theme'
     html_static_path = ['_static']
+
+livereload
+**********
+
+.. literalinclude :: ../bin/livereload
+   :language: python
 

@@ -30,9 +30,11 @@
 <v t="avidclam.20191107150449.1"></v>
 <v t="avidclam.20191107163123.1"><vh>Настроить sphinx</vh></v>
 <v t="avidclam.20191107233624.1"><vh>Выбрать редактор</vh></v>
+<v t="avidclam.20191108133333.1"><vh>Настроить livereload</vh></v>
 </v>
 <v t="avidclam.20191107160103.1"><vh>Файлы</vh>
 <v t="avidclam.20191107171459.1"><vh>conf.py</vh></v>
+<v t="avidclam.20191108140008.1"><vh>livereload</vh></v>
 </v>
 </v>
 <v t="avidclam.20191108073206.1"><vh>@rst leo</vh></v>
@@ -174,5 +176,15 @@
 - заметки под @rst this-site объединяются в единый файл this-site.rst, причем заголовки заметок становятся заголовками подразделов
 - некоторые заметки, такие как "Настроить проект на GitHub" --- это клоны заметок, подготовленных во "Фрагментах"
 - генерация rst-файлов происходит по команде ``rst3``, заданной в минибуфере</t>
+<t tx="avidclam.20191108133333.1">Команда ``make html`` в директории ``docs`` запускает Sphinx для создания сайта из подготовленных rst-файлов. Пакет `livereload &lt;https://github.com/lepture/python-livereload&gt;`_ автоматически запускает sphinx при каждом изменении исходных файлов и обеспечивает локальный ывеб-доступ к созданному сайту.
+
+После установки пакета командой ``pip install livereload`` нужно, как описано в Readme livereload, создать исполняемый скрипт (см. ниже), допустим, ``bin/livereload`` и запускать его командой::
+
+    ./bin/livereload &gt; ./log/livereload.log &amp;2&gt;1 &amp;
+
+Обновляемый сайт доступен по адресу http://localhost:5500/index.html
+</t>
+<t tx="avidclam.20191108140008.1">.. literalinclude :: ../bin/livereload
+   :language: python</t>
 </tnodes>
 </leo_file>
