@@ -33,6 +33,7 @@
     git config --global alias.hist "log --oneline --graph --decorate --all"
 
 На GitHub нажать Create a new repository:
+
 - выбрать Owner (себя или одну из созданных ранее Организаций), 
 - задать Repository name и Description, 
 - отметить "Initialize this repository with a README", 
