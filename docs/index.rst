@@ -1,5 +1,8 @@
 .. rst3: filename: index
 
+.. meta::
+   :keywords: linux, python, sphinx, reStructuredText
+
 Записки самоучки
 ================
 
@@ -15,12 +18,12 @@
 
    this-site
    leo
+   useful-url
 
 Указатели и поиск
 =================
 
-* :ref:`genindex`
 * :ref:`search`
 
-Ключевые слова: Linux, Python, Sphinx
+Ключевые слова: Linux, Python, Sphinx, reStructuredText
 

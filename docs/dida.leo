@@ -39,6 +39,9 @@
 </v>
 </v>
 <v t="avidclam.20191108073206.1"><vh>@rst leo</vh></v>
+<v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
+<v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
+</v>
 </v>
 </vnodes>
 <tnodes>
@@ -54,7 +57,10 @@
 - git, GitHub, Read the Docs
 </t>
 <t tx="avidclam.20191107111310.1"></t>
-<t tx="avidclam.20191107113327.1">Записки самоучки
+<t tx="avidclam.20191107113327.1">.. meta::
+   :keywords: linux, python, sphinx, reStructuredText
+
+Записки самоучки
 ================
 
 Некогда, буквально восприняв ``#learntocode``, я без особого труда прошел отличный вводный курс "`Программирование на Python &lt;https://stepik.org/course/67/promo&gt;`_" и решил, что так победим. Очень скоро однако выяснилось, что для мало-мальски полезного проекта требуются хотя бы базовые навыки в куче смежных технологий. 
@@ -69,14 +75,14 @@
 
    this-site
    leo
+   useful-url
 
 Указатели и поиск
 =================
 
-* :ref:`genindex`
 * :ref:`search`
 
-Ключевые слова: Linux, Python, Sphinx
+Ключевые слова: Linux, Python, Sphinx, reStructuredText
 </t>
 <t tx="avidclam.20191107122350.1"></t>
 <t tx="avidclam.20191107135638.1">- создавать заметки в текстовом редакторе
@@ -191,5 +197,10 @@
 
 - `Размещение на своём домене &lt;https://docs.readthedocs.io/en/stable/custom_domains.html&gt;`_
 - `Привязка Google Analytics к сайту &lt;https://docs.readthedocs.io/en/stable/guides/google-analytics.html&gt;`_</t>
+<t tx="avidclam.20191108144631.1">Полезные ссылки
+===============
+
+Ниже, без особой системы, даны ссылки на полезные ресурсы.</t>
+<t tx="avidclam.20191108144810.1">- `Online Sphinx editor &lt;https://livesphinx.herokuapp.com&gt;`_</t>
 </tnodes>
 </leo_file>
