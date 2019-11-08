@@ -101,6 +101,14 @@
 
 Обновляемый сайт доступен по адресу http://localhost:5500/index.html
 
+Настроить Read the Docs
+********************************
+
+Использование Read the Docs интуитивно. Основные действия по импорту проекта из GitHub проводятся на странице `списка проектов <https://readthedocs.org/dashboard>`_. Полезные возможности хорошо описаны в `документации <https://docs.readthedocs.io/en/stable/>`_:
+
+- `Размещение на своём домене <https://docs.readthedocs.io/en/stable/custom_domains.html>`_
+- `Привязка Google Analytics к сайту <https://docs.readthedocs.io/en/stable/guides/google-analytics.html>`_
+
 Файлы
 ++++++++++
 
