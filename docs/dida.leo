@@ -20,7 +20,12 @@
 <v t="avidclam.20191107154943.1"><vh>conf.py</vh></v>
 </v>
 <v t="avidclam.20191107122350.1"><vh>dida</vh>
-<v t="avidclam.20191107113327.1"><vh>@rst index</vh></v>
+<v t="avidclam.20191107113327.1"><vh>@rst index</vh>
+<v t="avidclam.20191111122556.1"><vh>@rst-no-head intro</vh></v>
+<v t="avidclam.20191111122650.1"><vh>@rst-no-head toctree</vh></v>
+<v t="avidclam.20191111122732.1"><vh>@rst-no-head &lt;index-entries&gt;</vh></v>
+<v t="avidclam.20191111122801.1"><vh>@rst-no-head footer</vh></v>
+</v>
 <v t="avidclam.20191107105031.1"><vh>@rst this-site</vh>
 <v t="avidclam.20191107135638.1"><vh>Требуется</vh></v>
 <v t="avidclam.20191107105156.1"><vh>Технологии</vh></v>
@@ -42,6 +47,8 @@
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
 </v>
+<v t="avidclam.20191111073339.1"><vh>@rst autosphinx</vh></v>
+<v t="avidclam.20191111130411.1"><vh>@rst nothing</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -57,34 +64,29 @@
 - git, GitHub, Read the Docs
 </t>
 <t tx="avidclam.20191107111310.1"></t>
-<t tx="avidclam.20191107113327.1">.. meta::
-   :keywords: linux, python, sphinx, reStructuredText
+<t tx="avidclam.20191107113327.1"></t>
+<t tx="avidclam.20191107122350.1">@language python
+"""
+Auto-fills index entries into index.rst file 
+by rewriting '@rst-no-head &lt;index-entries&gt;' node.
+Finally, executes 'rst3' command.
+"""
 
-Записки самоучки
-================
+target_ending = '&lt;index-entries&gt;'
+idx_node = p.firstChild()  # assumes index node is the first one
+idx_subnodes = idx_node.children()
+idx_entries_node = None
+for subnode in idx_subnodes:
+    if subnode.h.endswith(target_ending):
+        idx_entries_node = subnode
+        break
+if idx_entries_node is not None:
+    content_nodes = idx_node.following_siblings()
+    rst_names = [nd.h[5:] for nd in content_nodes if nd.h.startswith('@rst ')]
+    idx_entries_node.b = '   ' + '\n   '.join(rst_names) + '\n'
 
-Некогда, буквально восприняв ``#learntocode``, я без особого труда прошел отличный вводный курс "`Программирование на Python &lt;https://stepik.org/course/67/promo&gt;`_" и решил, что так победим. Очень скоро однако выяснилось, что для мало-мальски полезного проекта требуются хотя бы базовые навыки в куче смежных технологий. 
-
-Не то чтобы они были неподъемны. Проблема в том, что интуитивность --- не сильная сторона компьютерных технологий, и без постоянного использования полученные знания немедленно выветриваются из головы.
-
-Чтобы не читать снова и снова одни и те же *Getting Started*, я стал записывать для себя (и тут же терять) краткие инструкции, а когда познакомился со Sphinx, решил оформлять новые заметки сразу в виде сайта и держать всё на `GitHub &lt;https://github.com/&gt;`_ и `Read the Docs &lt;https://readthedocs.org/&gt;`_, т.е. под рукой.
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Содержание:
-
-   this-site
-   leo
-   useful-url
-
-Указатели и поиск
-=================
-
-* :ref:`search`
-
-Ключевые слова: Linux, Python, Sphinx, reStructuredText
+c.executeMinibufferCommand('rst3')
 </t>
-<t tx="avidclam.20191107122350.1"></t>
 <t tx="avidclam.20191107135638.1">- создавать заметки в текстовом редакторе
 - генерировать на их основе статический сайт с нужной структурой, синтаксической разметкой кода и т.п.
 - размещать созданный сайт на своем домене, не связываясь с хостинг-провайдерами</t>
@@ -202,5 +204,41 @@
 
 Ниже, без особой системы, даны ссылки на полезные ресурсы.</t>
 <t tx="avidclam.20191108144810.1">- `Online Sphinx editor &lt;https://livesphinx.herokuapp.com&gt;`_</t>
+<t tx="avidclam.20191111073339.1">.. _chapter_autosphinx:
+
+AutoSphinx - доработанный livereload
+====================================
+
+.. literalinclude :: ../bin/autosphinx
+   :language: python</t>
+<t tx="avidclam.20191111122556.1">.. meta::
+   :keywords: linux, python, sphinx, reStructuredText
+
+Записки самоучки
+================
+
+Некогда, буквально восприняв ``#learntocode``, я без особого труда прошел отличный вводный курс "`Программирование на Python &lt;https://stepik.org/course/67/promo&gt;`_" и решил, что так победим. Очень скоро однако выяснилось, что для мало-мальски полезного проекта требуются хотя бы базовые навыки в куче смежных технологий. 
+
+Не то чтобы они были неподъемны. Проблема в том, что интуитивность --- не сильная сторона компьютерных технологий, и без постоянного использования полученные знания немедленно выветриваются из головы.
+
+Чтобы не читать снова и снова одни и те же *Getting Started*, я стал записывать для себя (и тут же терять) краткие инструкции, а когда познакомился со Sphinx, решил оформлять новые заметки сразу в виде сайта и держать всё на `GitHub &lt;https://github.com/&gt;`_ и `Read the Docs &lt;https://readthedocs.org/&gt;`_, т.е. под рукой.</t>
+<t tx="avidclam.20191111122650.1">.. toctree::
+   :maxdepth: 1
+   :caption: Содержание:</t>
+<t tx="avidclam.20191111122732.1">   this-site
+   leo
+   useful-url
+   autosphinx
+   nothing
+</t>
+<t tx="avidclam.20191111122801.1">Указатели и поиск
+=================
+
+* :ref:`search`
+
+Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
+<t tx="avidclam.20191111130411.1">Nothing
+=======
+</t>
 </tnodes>
 </leo_file>

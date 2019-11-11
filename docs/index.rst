@@ -1,5 +1,7 @@
 .. rst3: filename: index
 
+
+
 .. meta::
    :keywords: linux, python, sphinx, reStructuredText
 
@@ -19,6 +21,7 @@
    this-site
    leo
    useful-url
+   autosphinx
 
 Указатели и поиск
 =================
