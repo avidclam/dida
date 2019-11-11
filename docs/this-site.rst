@@ -81,7 +81,8 @@
     cd docs
     sphinx-quickstart
 
-На вопрос "Separate source and build directories (y/n) [n]:" ответить n.
+На вопрос "Separate source and build directories (y/n) [n]:" ответить n
+(не принципиально, но структура директорий будет немного отличаться).
 
 Получившийся файл ``conf.py`` подправить по образцу, см. `Файлы`_.
 
@@ -100,6 +101,8 @@
     ./bin/livereload > ./log/livereload.log &2>1 &
 
 Обновляемый сайт доступен по адресу http://localhost:5500/index.html
+
+Можно воспользоваться скриптом :ref:`chapter_autosphinx`.
 
 Настроить Read the Docs
 ********************************

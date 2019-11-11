@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+"""Rebuild Sphinx docs on changes of source files.
+Serve resulting html locally with livereload."""
+import sys
+import argparse
+from pathlib import Path
+from contextlib import redirect_stderr
+from livereload import Server, shell
+
+
+def wait_and_serve(*watch_globs, make_dir, html_dir, host, port, delay):
+    """Watch globs for changes, launch sphinx ``make html``
+    and serve resulting html locally
+
+    Args:
+        *watch_globs: globs to watch for, e.g. 'docs/*.rst'
+        make_dir (Path): directory where Makefile resides
+        html_dir (Path): directory of resulting html structure
+        host (str): host to run livereload server on, default: localhost
+        port (int): port to run livereload server on, default: 5500
+        delay (int): time delay before reloading
+
+    """
+    server = Server()
+    rebuild = shell('make html', cwd=str(make_dir))
+    for watch_glob in watch_globs:
+        server.watch(str(watch_glob), rebuild,  delay=delay)
+    server.serve(host=host, port=port, root=str(html_dir))
+
+
+if __name__ == '__main__':
+    # Get/set arguments
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-s', '--host', action='store', type=str,
+                        default='localhost',
+                        help="host name to serve on [default: localhost]")
+    parser.add_argument('-p', '--port', action='store', type=int, default=5500,
+                        help="port to serve on [default: 5500]")
+    parser.add_argument('-w', '--wait', action='store', type=int, default=3,
+                        help="wait time, in sec, before reload")
+    parser.add_argument('-l', '--log', action='store_true',
+                        help="redirect log messages to logfile")
+    args = parser.parse_args()
+    # Find project's top folder, assume it's the one containing .git
+    top_dir = None
+    cwd = Path.cwd()
+    for check_dir in (cwd, cwd.parent, cwd.parent.parent):
+        git_dir = check_dir / '.git'
+        if git_dir.exists() and git_dir.is_dir():
+            top_dir = check_dir
+            break
+    if top_dir is None:
+        sys.exit("Can't find project's top folder")
+    # Check if sphinx docs folder is there
+    # and whether source an build folder are separated during sphinx-quickstart
+    docs_dir = top_dir / 'docs'
+    makefile = docs_dir / 'Makefile'
+    if not docs_dir.exists() or not makefile.exists():
+        sys.exit("Can't find Sphinx docs folder or Makefile")
+    build_dir = docs_dir / 'build'  # for separated source and build
+    source_dir = docs_dir / 'source'
+    if not build_dir.exists():
+        build_dir = docs_dir / '_build'  # not separated
+        source_dir = docs_dir
+        if not build_dir.exists():
+            sys.exit('Bad docs folder structure')
+    html_dir = build_dir / 'html'
+    # Set log file path
+    log_dir = top_dir / 'log'
+    if not log_dir.exists():
+        log_dir = top_dir
+    logpath = log_dir / 'autosphinx.log'
+    api_dir = source_dir / 'api'
+    if api_dir.exists() and api_dir.is_dir():
+        watch_globs = (source_dir / '*.rst', api_dir / '*.rst')
+    else:
+        watch_globs = (source_dir / '*.rst',)
+    if args.log:
+        with open(str(logpath), 'w') as logfile:
+            with redirect_stderr(logfile):
+                wait_and_serve(*watch_globs,
+                               make_dir=docs_dir, html_dir=html_dir,
+                               host=args.host, port=args.port, delay=args.wait)
+    else:
+        wait_and_serve(*watch_globs,
+                       make_dir=docs_dir, html_dir=html_dir,
+                       host=args.host, port=args.port, delay=args.wait)

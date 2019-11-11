@@ -48,7 +48,6 @@
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
 </v>
 <v t="avidclam.20191111073339.1"><vh>@rst autosphinx</vh></v>
-<v t="avidclam.20191111130411.1"><vh>@rst nothing</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -139,7 +138,8 @@ c.executeMinibufferCommand('rst3')
     cd docs
     sphinx-quickstart
 
-На вопрос "Separate source and build directories (y/n) [n]:" ответить n.
+На вопрос "Separate source and build directories (y/n) [n]:" ответить n
+(не принципиально, но структура директорий будет немного отличаться).
 
 Получившийся файл ``conf.py`` подправить по образцу, см. `Файлы`_.
 </t>
@@ -192,6 +192,8 @@ c.executeMinibufferCommand('rst3')
     ./bin/livereload &gt; ./log/livereload.log &amp;2&gt;1 &amp;
 
 Обновляемый сайт доступен по адресу http://localhost:5500/index.html
+
+Можно воспользоваться скриптом :ref:`chapter_autosphinx`.
 </t>
 <t tx="avidclam.20191108140008.1">.. literalinclude :: ../bin/livereload
    :language: python</t>
@@ -206,8 +208,23 @@ c.executeMinibufferCommand('rst3')
 <t tx="avidclam.20191108144810.1">- `Online Sphinx editor &lt;https://livesphinx.herokuapp.com&gt;`_</t>
 <t tx="avidclam.20191111073339.1">.. _chapter_autosphinx:
 
-AutoSphinx - доработанный livereload
+autosphinx --- скрипт для livereload
 ====================================
+
+Скрипт `livereload &lt;https://github.com/lepture/python-livereload&gt;`_
+для запуска Sphinx и пересборки html-документации 
+при изменении исходных rst-файлов, был доработан и назван ``autosphinx``.
+
+Его можно запускать из директории проекта, папки docs или еще на один
+уровень ниже, например, docs/source.
+
+Ключ ``-l`` перенаправляет вывод в лог-файл log/autosphinx.log
+
+Типичный запуск будет выглядеть примерно так::
+    
+    autosphinx -p 5501 -w -3 -l&amp;
+
+Код скрипта ниже:
 
 .. literalinclude :: ../bin/autosphinx
    :language: python</t>
@@ -229,7 +246,6 @@ AutoSphinx - доработанный livereload
    leo
    useful-url
    autosphinx
-   nothing
 </t>
 <t tx="avidclam.20191111122801.1">Указатели и поиск
 =================
@@ -237,8 +253,5 @@ AutoSphinx - доработанный livereload
 * :ref:`search`
 
 Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
-<t tx="avidclam.20191111130411.1">Nothing
-=======
-</t>
 </tnodes>
 </leo_file>
