@@ -20,6 +20,7 @@
 
    this-site
    leo
+   Linux
    useful-url
    autosphinx
 

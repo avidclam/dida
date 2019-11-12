@@ -44,6 +44,11 @@
 </v>
 </v>
 <v t="avidclam.20191108073206.1"><vh>@rst leo</vh></v>
+<v t="avidclam.20191112105836.1"><vh>@rst Linux</vh>
+<v t="avidclam.20191112105856.1"><vh>Bash</vh>
+<v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
+</v>
+</v>
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
 </v>
@@ -244,6 +249,7 @@ autosphinx --- скрипт для livereload
    :caption: Содержание:</t>
 <t tx="avidclam.20191111122732.1">   this-site
    leo
+   Linux
    useful-url
    autosphinx
 </t>
@@ -253,5 +259,17 @@ autosphinx --- скрипт для livereload
 * :ref:`search`
 
 Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
+<t tx="avidclam.20191112105836.1">Linux
+=====</t>
+<t tx="avidclam.20191112105856.1"></t>
+<t tx="avidclam.20191112105906.1">::
+    
+    autosphinx -l &amp;  # launch background job
+    jobs  # list background jobs, add -l for PIDs
+    fg %1  # put job #1 into foreground
+    # Ctrl+Z: put foreground process on pause
+    bg  # continue running process in the background
+    kill -HUP %1  # send hangup to the process
+    disown %1  # detach job from terminal</t>
 </tnodes>
 </leo_file>
