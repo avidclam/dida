@@ -16,7 +16,7 @@ autosphinx --- скрипт для livereload
 
 Типичный запуск будет выглядеть примерно так::
     
-    autosphinx -p 5501 -w -3 -l&
+    autosphinx -p 5501 -w 3 -l&
 
 Код скрипта ниже:
 

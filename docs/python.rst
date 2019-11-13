@@ -32,7 +32,10 @@ Fixtures
         assert 'a' in data_x_a
 
 В составе pytest есть и готовые к использованию fixtures, 
-такие как `tmp_path <http://doc.pytest.org/en/latest/tmpdir.html>`_.
+такие как `tmp_path <http://doc.pytest.org/en/latest/tmpdir.html>`_
+(временная директория) или
+`capsys <https://docs.pytest.org/en/latest/reference.html?highlight=capsys#capsys>`_
+(перехват вывода в stdout/stderr).
 Их не нужно явно импортировать.
 
 Исключения

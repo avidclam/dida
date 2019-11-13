@@ -233,7 +233,7 @@ autosphinx --- скрипт для livereload
 
 Типичный запуск будет выглядеть примерно так::
     
-    autosphinx -p 5501 -w -3 -l&amp;
+    autosphinx -p 5501 -w 3 -l&amp;
 
 Код скрипта ниже:
 
@@ -302,7 +302,10 @@ autosphinx --- скрипт для livereload
         assert 'a' in data_x_a
 
 В составе pytest есть и готовые к использованию fixtures, 
-такие как `tmp_path &lt;http://doc.pytest.org/en/latest/tmpdir.html&gt;`_.
+такие как `tmp_path &lt;http://doc.pytest.org/en/latest/tmpdir.html&gt;`_
+(временная директория) или
+`capsys &lt;https://docs.pytest.org/en/latest/reference.html?highlight=capsys#capsys&gt;`_
+(перехват вывода в stdout/stderr).
 Их не нужно явно импортировать.
 
 </t>
