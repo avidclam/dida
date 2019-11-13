@@ -44,7 +44,13 @@
 </v>
 </v>
 <v t="avidclam.20191108073206.1"><vh>@rst leo</vh></v>
-<v t="avidclam.20191112105836.1"><vh>@rst Linux</vh>
+<v t="avidclam.20191113102041.1"><vh>@rst python</vh>
+<v t="avidclam.20191113102147.1"><vh>pytest</vh>
+<v t="avidclam.20191113102227.1"><vh>Fixtures</vh></v>
+<v t="avidclam.20191113104456.1"><vh>Исключения</vh></v>
+</v>
+</v>
+<v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20191112105856.1"><vh>Bash</vh>
 <v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
 </v>
@@ -249,7 +255,8 @@ autosphinx --- скрипт для livereload
    :caption: Содержание:</t>
 <t tx="avidclam.20191111122732.1">   this-site
    leo
-   Linux
+   python
+   linux
    useful-url
    autosphinx
 </t>
@@ -271,5 +278,42 @@ autosphinx --- скрипт для livereload
     bg  # continue running process in the background
     kill -HUP %1  # send hangup to the process
     disown %1  # detach job from terminal</t>
+<t tx="avidclam.20191113102041.1">Python
+======</t>
+<t tx="avidclam.20191113102147.1"></t>
+<t tx="avidclam.20191113102227.1">К слову об интуитивности ...
+
+Допустим, нужно в тест-функции использовать какие-то данные, 
+скажем, ``{'x': 1, 'a': 'one'}``.
+Для этого в файле ``tests/conftest.py`` создается fixture:
+
+.. code-block:: python
+
+    @pytest.fixture()
+    def data_x_a():
+        return {'x': 1, 'a': 'one'}
+
+Теперь тестовая функция может принимать ``data_x_a``.
+
+.. code-block:: python
+
+    def test_data(data_x_a):
+        assert 'x' in data_x_a
+        assert 'a' in data_x_a
+
+В составе pytest есть и готовые к использованию fixtures, 
+такие как `tmp_path &lt;http://doc.pytest.org/en/latest/tmpdir.html&gt;`_.
+Их не нужно явно импортировать.
+
+</t>
+<t tx="avidclam.20191113104456.1">Протестировать на исключения можно с помощью
+`pytest.raises &lt;https://docs.pytest.org/en/latest/reference.html#pytest-raises&gt;`_.
+
+.. code-block:: python
+
+    def test_exception(data_x_a):
+        with pytest.raises(KeyError, match=r"nonexistent"):
+            data_x_a['nonexistent']
+</t>
 </tnodes>
 </leo_file>

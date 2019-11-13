@@ -19,4 +19,5 @@ Bash
     # Ctrl+Z: put foreground process on pause
     bg  # continue running process in the background
     kill -HUP %1  # send hangup to the process
+    disown %1  # detach job from terminal
 

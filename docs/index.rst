@@ -20,7 +20,8 @@
 
    this-site
    leo
-   Linux
+   python
+   linux
    useful-url
    autosphinx
 
