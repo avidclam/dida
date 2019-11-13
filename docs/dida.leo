@@ -47,7 +47,8 @@
 <v t="avidclam.20191113102041.1"><vh>@rst python</vh>
 <v t="avidclam.20191113102147.1"><vh>pytest</vh>
 <v t="avidclam.20191113102227.1"><vh>Fixtures</vh></v>
-<v t="avidclam.20191113104456.1"><vh>Исключения</vh></v>
+<v t="avidclam.20191113104456.1"><vh>Проверка исключений</vh></v>
+<v t="avidclam.20191113212016.1"><vh>Перехват stdout/stderr</vh></v>
 </v>
 </v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
@@ -318,5 +319,12 @@ autosphinx --- скрипт для livereload
         with pytest.raises(KeyError, match=r"nonexistent"):
             data_x_a['nonexistent']
 </t>
+<t tx="avidclam.20191113212016.1">.. code-block:: python
+
+    def test_stdout(capsys):
+        msg = 'Go capture stdout'
+        print(msg)
+        captured = capsys.readouterr()
+        assert captured.out == msg + "\n"</t>
 </tnodes>
 </leo_file>

@@ -38,8 +38,8 @@ Fixtures
 (перехват вывода в stdout/stderr).
 Их не нужно явно импортировать.
 
-Исключения
-********************
+Проверка исключений
+*************************************
 
 Протестировать на исключения можно с помощью
 `pytest.raises <https://docs.pytest.org/en/latest/reference.html#pytest-raises>`_.
@@ -49,4 +49,15 @@ Fixtures
     def test_exception(data_x_a):
         with pytest.raises(KeyError, match=r"nonexistent"):
             data_x_a['nonexistent']
+
+Перехват stdout/stderr
+******************************
+
+.. code-block:: python
+
+    def test_stdout(capsys):
+        msg = 'Go capture stdout'
+        print(msg)
+        captured = capsys.readouterr()
+        assert captured.out == msg + "\n"
 
