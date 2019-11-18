@@ -19,11 +19,20 @@ Fixtures
 
 .. code-block:: python
 
-    @pytest.fixture()
-    def data_x_a():
-        return {'x': 1, 'a': 'one'}
+    data_x_a = {'x': 1, 'a': 'one'}
+    
+    @pytest.fixture(name='data_x_a')
+    def data_x_a_fixture():
+        return data_x_a
 
-Теперь тестовая функция может принимать ``data_x_a``.
+Теперь данные можно использовать в своих sandbox-скриптах,
+
+.. code-block:: python
+
+    from tests.conftest import data_x_a
+    # some code
+
+и тестовая функция может принимать ``data_x_a``:
 
 .. code-block:: python
 
