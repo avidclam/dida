@@ -52,6 +52,9 @@
 </v>
 </v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
+<v t="avidclam.20191226145846.1"><vh>Что происходит?</vh>
+<v t="avidclam.20191226145905.1"><vh>Watch</vh></v>
+</v>
 <v t="avidclam.20191112105856.1"><vh>Bash</vh>
 <v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
 </v>
@@ -336,5 +339,12 @@ autosphinx --- скрипт для livereload
         print(msg)
         captured = capsys.readouterr()
         assert captured.out == msg + "\n"</t>
+<t tx="avidclam.20191226145846.1"></t>
+<t tx="avidclam.20191226145905.1">Довольно тривиальная команда, но почему-то все время забывается.
+Допустим, нужно, запустив процесс, последить, какие файлы он добавляет в директорию.
+
+Здесь нам поможет::
+
+    watch tree &lt;directory&gt;</t>
 </tnodes>
 </leo_file>
