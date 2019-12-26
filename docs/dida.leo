@@ -81,6 +81,7 @@
 Auto-fills index entries into index.rst file 
 by rewriting '@rst-no-head &lt;index-entries&gt;' node.
 Finally, executes 'rst3' command.
+Use Ctrl+B to run the script.
 """
 
 target_ending = '&lt;index-entries&gt;'
