@@ -21,6 +21,7 @@
    this-site
    leo
    python
+   vm
    linux
    useful-url
    autosphinx
