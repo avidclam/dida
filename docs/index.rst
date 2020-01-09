@@ -22,6 +22,7 @@
    leo
    python
    vm
+   redhat
    linux
    useful-url
    autosphinx

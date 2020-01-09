@@ -54,6 +54,16 @@
 <v t="avidclam.20191227103728.1"><vh>@rst vm</vh>
 <v t="avidclam.20191227103823.1"><vh>Нумерация</vh></v>
 </v>
+<v t="avidclam.20200109092449.1"><vh>@rst redhat</vh>
+<v t="avidclam.20200109092637.1"><vh>Установка</vh>
+<v t="avidclam.20200109092653.1"><vh>Failed to set MokListRT</vh></v>
+<v t="avidclam.20200109102910.1"><vh>Параметры</vh></v>
+<v t="avidclam.20200109121908.1"><vh>Первые настройки</vh></v>
+<v t="avidclam.20200109125808.1"><vh>Регистрация</vh></v>
+<v t="avidclam.20200109123826.1"><vh>Обновление промежуточное</vh></v>
+<v t="avidclam.20200109165702.1"><vh>Leapp</vh></v>
+</v>
+</v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20191226145846.1"><vh>Что происходит?</vh>
 <v t="avidclam.20191226145905.1"><vh>Watch</vh></v>
@@ -265,6 +275,7 @@ autosphinx --- скрипт для livereload
    leo
    python
    vm
+   redhat
    linux
    useful-url
    autosphinx
@@ -275,8 +286,8 @@ autosphinx --- скрипт для livereload
 * :ref:`search`
 
 Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
-<t tx="avidclam.20191112105836.1">Linux
-=====</t>
+<t tx="avidclam.20191112105836.1">Linux, разные мелочи
+====================</t>
 <t tx="avidclam.20191112105856.1"></t>
 <t tx="avidclam.20191112105906.1">::
     
@@ -371,5 +382,113 @@ autosphinx --- скрипт для livereload
     
     Чтобы MAC-адрес распознался как Locally Administered MAC Аddress, он должен начинаться с x2, x6, xA или xE. Далее октеты могут быть любыми. Удобно, чтобы они соответствовали IP-адресу. В последнем октете ставится единица, если сеть строится по правилу "один интерфейс --- один адрес", либо используются разные цифры для более хитрых настроек.
 </t>
+<t tx="avidclam.20200109092449.1">Red Hat Linux
+=============</t>
+<t tx="avidclam.20200109092637.1"></t>
+<t tx="avidclam.20200109092653.1">Знакомство с Red Hat Linux начинается с сообщения::
+    
+    Failed to set MokListRT: Invalid Parameter
+    Something has gone seriously wrong: import_mok_state() failed:
+    Invalid Parameter
+
+Вроде бы виноваты пакеты ``shim-x64`` и ``mokutil``
+и поэтому предлагается их не обновлять во избежание проблем::
+
+   echo "exclude=shim-x64,mokutil" &gt;&gt; /etc/yum.conf
+
+Прекрасное решение для работающей системы, которой пока нет. Ставим 7.6.
+</t>
+<t tx="avidclam.20200109102910.1">Устанавливаем с учетом Installation Guide, в частности, Recommended Partitioning Scheme,
+а также по мотивам https://habr.com/ru/post/469097/.
+
+Выделено два диска по 24Gb, один из них подключен на этапе установки, другой после.
+
+Разбивка диска::
+    
+    swap	2Gb (см. ниже)
+    /boot	1Gb (не lvm, ext4)
+    /boot/efi   200M (не lvm, vfat)
+    /		10Gb (lvm, ext4)
+    /var	4Gb (lvm, ext4)
+    /home   1Gb (lvm, ext4)
+    остальное место остается в запасе
+
+Место под swap выделено из соображений стандартности и как запас.
+Есть мнение, что в виртуалках swap не нужен, а, например, руководство Elasticsearch явно рекомендует не использовать swap.
+
+Остальное стандартно: часовой пояс Московский, сеть настраивается, пользователь не создается, 
+после каждого большого этапа делается shapshot виртуального диска.
+</t>
+<t tx="avidclam.20200109121908.1">Надо таки деактивировать swap, для этого закомментировать строчку в /etc/fstab и в командной строке::
+    
+    lsblk
+    swapoff /dev/vda3
+    free -h
+</t>
+<t tx="avidclam.20200109123826.1">После регистрации и оформления подписки можно обновиться.
+Сначала обновляется текущая система в рамках 7.6, с учетом "исключенных" пакетов::
+    
+    yum clean all
+    echo "exclude=shim-x64,mokutil" &gt;&gt; /etc/yum.conf
+    yum --releasever=7.6 update
+
+Подробности обновления в рамках минорной версии см. https://access.redhat.com/solutions/238533
+
+Далее нужно обновиться до 7.6 EUS::
+    
+    subscription-manager repos --disable rhel-7-server-rpms --enable rhel-7-server-eus-rpms
+    subscription-manager repos --enable rhel-7-server-extras-rpms
+    subscription-manager repos --disable rhel-7-server-optional-rpms --enable rhel-7-server-eus-optional-rpms
+    subscription-manager repos --disable rhel-7-server-supplementary-rpms --enable rhel-7-server-eus-supplementary-rpms
+    subscription-manager release --set 7.6
+    yum update
+    reboot
+
+
+
+
+
+
+
+</t>
+<t tx="avidclam.20200109125808.1">RHEL --- продукт коммерческий и хотя он доступен для разработчиков, использование требует управления подписками.
+
+Сначала нужно зарегистрировать систему::
+    
+    subscription-manager register
+
+В качестве username --- короткое имя пользователя, **не email**.
+
+Затем нужно присоединить (attach) подписку к зарегистрированной системе::
+    
+    subscription manager attach
+
+Неплохо зайти на Customer Portal посмотреть, как зарегистрировалась система: https://access.redhat.com/management/systems
+</t>
+<t tx="avidclam.20200109165702.1">Обновление на версию 8 начинается с утилиты Leapp. Сначала::
+    
+    yum install leapp
+    
+Далее нужно скачать файл ``leapp-data6.tar.gz`` из статьи 
+https://access.redhat.com/articles/3664871 и распаковать его в нужное место::
+    
+    tar -xzf leapp-data6.tar.gz -C /etc/leapp/files &amp;&amp; rm leapp-data6.tar.gz
+
+Потом запустить этап оценки обновляемости::
+    
+    leapp preupgrade
+
+почитать отчет /var/log/leapp/leapp-report.txt и настроить согласно рекомендациям как минимум то, 
+что отмечено как inhibitor. В данном случае надо установить "PermitRootLogin yes" в sshd_config,
+что пока не требуется (sshd еще не настраивали), но позволяет пройти дальше с обновлением.
+
+Notes:
+    Причина рекомендации --- изменилось поведение по умолчанию в RHEL8. 
+    Если параметр PermitRootLogin явно не установлен, вход с паролем запрещается.
+
+
+Наконец, идет непосредственно этап обновления::
+    
+    leapp upgrade</t>
 </tnodes>
 </leo_file>
