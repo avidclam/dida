@@ -64,6 +64,14 @@
 <v t="avidclam.20200110124654.1"><vh>Починка</vh></v>
 <v t="avidclam.20200110125519.1"><vh>Проверка</vh></v>
 </v>
+<v t="avidclam.20200110155153.1"><vh>Курс администратора</vh>
+<v t="avidclam.20200110163051.1"><vh>Отличия RHEL8 от RHEL7</vh></v>
+<v t="avidclam.20200110165512.1"><vh>Замечания по установке</vh></v>
+<v t="avidclam.20200110170245.1"><vh>Задания</vh>
+<v t="avidclam.20200110170258.1"><vh>Переустановить забытый пароль</vh></v>
+<v t="avidclam.20200110172233.1"><vh>Включить SELinux</vh></v>
+</v>
+</v>
 </v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20191226145846.1"><vh>Что происходит?</vh>
@@ -498,7 +506,7 @@ Notes:
     cp -a EFI EFI81
     cp EFI76/BOOT/BOOT* EFI/BOOT
     cp EFI76/redhat/shim* EFI/redhat
-    shitdown now
+    shutdown now
 
 Отключаем установочный диск, перегружаемся, и все вроде работает.
 </t>
@@ -521,5 +529,36 @@ Notes:
 И включаем SELinux::
     
     setenforce 1</t>
+<t tx="avidclam.20200110155153.1">Ниже заметки слушателя курса RHCSA на Udemy https://www.udemy.com/course/rhcsa-practice-exam-questions-ex200-redhat-release-7/.
+На всякий случай, страница экзамена: https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam.</t>
+<t tx="avidclam.20200110163051.1">* От единого репозитория к двум: BaseOS и AppStream. Добавилась концепция "модулей" (логически связанный набор пакетов).
+* YUM обновлен до версии 4 (DNF), поддерживающей модули.
+* Устарел ntp daemon, поддерживается только chronyd для синхронизации времени.
+* Средство настройки сети --- Network Manager. Скрипты ipup/ipdown зависят от nmcli.
+* Добавлена поддержка Stratis как среддства storage management.
+* Вместо authconfig --- authselect.</t>
+<t tx="avidclam.20200110165512.1">При установке на VM нужно корректно подобрать виртуальное "железо".
+
+* HDD: (IDE or SATA disk type, not SCSI)
+
+Тип установки можно выбрать любой, но не "Server with GUI".
+</t>
+<t tx="avidclam.20200110170245.1"></t>
+<t tx="avidclam.20200110170258.1">В меню GRUB надо нажать "e" (edit) и в строчку ядра (начинается с linux) дописать ``rd.break`` в конце, после чего нажать Ctrl+x для продолжения загрузки.
+В режиме rescue перемонтировать корневую директорию для чтения-записи, переустановить пароль и указать SELinux на необходимость переразметки::
+    
+    mount -o remount,rw /sysroot
+    chroot /sysroot
+    passwd
+    touch /.autorelabel
+    exit
+    mount -o remount,ro /sysroot
+    reboot
+</t>
+<t tx="avidclam.20200110172233.1">Текущий режим можно узнать с помощью getenforce или sestatus, а установить --- в /etc/selinux/config::
+    
+    SELINUX=enforcing
+
+Активируется при перезагрузке.</t>
 </tnodes>
 </leo_file>

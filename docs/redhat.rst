@@ -138,7 +138,7 @@ Notes:
     cp -a EFI EFI81
     cp EFI76/BOOT/BOOT* EFI/BOOT
     cp EFI76/redhat/shim* EFI/redhat
-    shitdown now
+    shutdown now
 
 Отключаем установочный диск, перегружаемся, и все вроде работает.
 
@@ -164,4 +164,57 @@ Notes:
 И включаем SELinux::
     
     setenforce 1
+
+Курс администратора
++++++++++++++++++++++++++++++++++++++
+
+Ниже заметки слушателя курса RHCSA на Udemy https://www.udemy.com/course/rhcsa-practice-exam-questions-ex200-redhat-release-7/.
+На всякий случай, страница экзамена: https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam.
+
+Отличия RHEL8 от RHEL7
+*******************************
+
+* От единого репозитория к двум: BaseOS и AppStream. Добавилась концепция "модулей" (логически связанный набор пакетов).
+* YUM обновлен до версии 4 (DNF), поддерживающей модули.
+* Устарел ntp daemon, поддерживается только chronyd для синхронизации времени.
+* Средство настройки сети --- Network Manager. Скрипты ipup/ipdown зависят от nmcli.
+* Добавлена поддержка Stratis как среддства storage management.
+* Вместо authconfig --- authselect.
+
+Замечания по установке
+******************************************
+
+При установке на VM нужно корректно подобрать виртуальное "железо".
+
+* HDD: (IDE or SATA disk type, not SCSI)
+
+Тип установки можно выбрать любой, но не "Server with GUI".
+
+Задания
+**************
+
+
+
+Переустановить забытый пароль
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+В меню GRUB надо нажать "e" (edit) и в строчку ядра (начинается с linux) дописать ``rd.break`` в конце, после чего нажать Ctrl+x для продолжения загрузки.
+В режиме rescue перемонтировать корневую директорию для чтения-записи, переустановить пароль и указать SELinux на необходимость переразметки::
+    
+    mount -o remount,rw /sysroot
+    chroot /sysroot
+    passwd
+    touch /.autorelabel
+    exit
+    mount -o remount,ro /sysroot
+    reboot
+
+Включить SELinux
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Текущий режим можно узнать с помощью getenforce или sestatus, а установить --- в /etc/selinux/config::
+    
+    SELINUX=enforcing
+
+Активируется при перезагрузке.
 
