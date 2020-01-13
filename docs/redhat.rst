@@ -171,6 +171,9 @@ Notes:
 Ниже заметки слушателя курса RHCSA на Udemy https://www.udemy.com/course/rhcsa-practice-exam-questions-ex200-redhat-release-7/.
 На всякий случай, страница экзамена: https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam.
 
+Заметки касаются только части вопросов, имеющих отношение к развертыванию одиночной системы RHEL/CentOS в Интернете.
+Не отражены разделы курса, посвященные таким "корпоративным" темам, как авторизация пользователей по LDAP, локальные репозитории и др.
+
 Отличия RHEL8 от RHEL7
 *******************************
 
@@ -217,4 +220,119 @@ Notes:
     SELINUX=enforcing
 
 Активируется при перезагрузке.
+
+Перейти в графический режим
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+То, что когда-то настраивалось через runlevel (от 0 до 5) в /etc/inittab, в systemd настраивается через "target":
+        
+* poweroff.target
+* rescue.target
+* multi-user.target ("текстовой режим", runlevel 3)
+* graphical.target ("графический режим", runlevel 5)
+* reboot.target
+
+Текущий target можно посмотреть командой ``systemctl get-default``.
+
+Где есть get default, должен быть set default, и он есть::
+    
+    systemctl isolate graphical.target
+    systemctl set-default graphical.target
+
+Чтобы было куда переключаться, нужно установить нужные пакеты, например, так::
+    
+    dnf group list
+    dnf groupinstall "Server with GUI"
+
+Для информации, юниты systemd находятся в директории /usr/lib/systemd/system/ . 
+Системные настройки, касающиеся юнитов --- в /etc/systemd/system/ .
+Например, default.target --- это ссылка на /usr/lib/systemd/....
+
+Настроить имя хоста и сеть
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Имя хоста настраивается, например, так::
+    
+    hostnamectl set-hostname system.example.com
+
+Сеть настраивается с помощью Network Manager.
+Команда ``nmcli`` без параметров выдает информацию о текущих настройках.
+Команда ``ip addr`` показывает интерфейсы и соответствующие IP-адреса, ``ip route show`` --- настройку маршрутизации.
+
+Следующие интуитивные команды настраивают и поднимают статическое IP-соединение::
+    
+    nmcli connection add con-name system type ethernet ifname eth0 ipv4.address 192.168.122.10/24 ipv4.gateway 192.168.122.1 ipv4.dns 192.168.122.254 ipv4.method manual 
+    nmcli connection up system
+
+Рестартовать Network Manager можно стандартно::
+    
+    systemctl restart NetworkManager
+
+Посмотреть текущие установки можно в директории
+
+::
+    
+    /etc/sysconfig/network-scripts
+
+Замечания про репозитории
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Некоторые полезные сведения о репозиториях, пакетах и управлении ими.
+
+* Вместо yum -\> dnf.
+* Как уже говорилось, в RHEL8 два репозитория --- BaseOS и AppStream.
+* Их можно найти, например, на ISO-диске RHEL8 в директориях с соответствующими именами и скопировать локально.
+
+После копирования создадим файл /etc/yum.repos.d/system.repo со следующим содержимым::
+    
+    [BaseOS]
+    name = BaseOS
+    baseurl = file:///root/BaseOS
+    gpgcheck = 0
+    enabled = 1
+    [AppStream]
+    name = AppStream
+    baseurl = file:///root/AppStream
+    gpgcheck = 0
+    enabled = 1
+
+Далее::
+    
+    dnf clean all
+    
+Проверка::
+    
+    dnf repolist
+    dnf groups list
+
+Запускать по cron от имени пользователя
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Создадим пользователя::
+    
+    useradd -c "Regular User" -d /home/regular -m --user-group -u 5010 regular
+    passwd regular
+    su - regular
+
+Рекомендация по выбору ID для RHEL8: *The recommended practice is to assign IDs starting at 5,000*, так что UID=5010 вполне соответствует.
+
+Создадим скрипт::
+    
+    su - regular
+    mkdir bin
+    mkdir log
+    echo "#!/bin/bash" > bin/cronjob.sh
+    echo "date >> /home/regular/log/cron.log" >> bin/cronjob.sh
+    chmod u+x bin/cronjob.sh
+    exit
+
+Настроим cron
+
+::
+
+    crontab -u regular -e
+    # в редакторе добавим строчку
+    */3 * * * * /home/regular/bin/cronjob.sh
+
+Скрипт будет исполняться каждые 3 минуты.
 
