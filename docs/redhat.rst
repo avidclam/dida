@@ -197,7 +197,11 @@ Notes:
 
 * HDD: (IDE or SATA disk type, not SCSI)
 
+Если хочется иметь "старые" названия сетевых интерфейсов (eth0, eth1), то можно до первой загрузки с DVD добавить ``net.ifnames=0`` [1]_ в параметры ядра соответствующей записи grub.
+
 Тип установки можно выбрать любой, но не "Server with GUI".
+
+.. [1] См. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_device_renaming_procedure
 
 Задания
 **************
