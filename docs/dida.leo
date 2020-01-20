@@ -76,6 +76,12 @@
 </v>
 </v>
 </v>
+<v t="avidclam.20200116172244.1"><vh>Kerberos-авторизация</vh>
+<v t="avidclam.20200117131847.1"><vh>Защищаем SSHD</vh></v>
+<v t="avidclam.20200117162449.1"><vh>Настраиваем KDC</vh></v>
+<v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
+<v t="avidclam.20200118194844.1"><vh>Доменный вход</vh></v>
+</v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20200115113137.1"><vh>Магия чисел</vh>
 <v t="avidclam.20191227103823.1"><vh>Виртуальные машины</vh></v>
@@ -87,11 +93,6 @@
 </v>
 <v t="avidclam.20191112105856.1"><vh>Bash</vh>
 <v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
-</v>
-<v t="avidclam.20200116172244.1"><vh>Kerberos-авторизация</vh>
-<v t="avidclam.20200117131847.1"><vh>Защищаем SSHD</vh></v>
-<v t="avidclam.20200117162449.1"><vh>Настраиваем KDC</vh></v>
-<v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
 </v>
 </v>
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
@@ -786,12 +787,12 @@ Notes:
     
     for f in $(find /sys/devices -name eth0); do udevadm info $f; done
 </t>
-<t tx="avidclam.20200116172244.1">Есть машины kdc, server и ws. Домен mynet, dns имеется. 
+<t tx="avidclam.20200116172244.1">Итак, есть машины ``kdc``, ``server`` и ``ws``. Домен ``mynet``, dns имеется. 
 
 Требуется настроить так, чтобы с рабочей станции ws можно было через ssh войти на server, авторизовавшись через Kerberos, установленный на kdc. Чтобы приблизить задачу к реальности, добавим недефолтные настройки sshd.
 </t>
 <t tx="avidclam.20200117131847.1">Сервер KDC должен быть хорошо защищен. 
-Для этого ставится минимальный Centos, sshd вешается на нестандартный порт и настраивается так, чтобы войти можно было только при наличии и ключа шифрования, и пароля.
+Для этого ставится минимальный Centos, sshd вешается на нестандартный порт и настраивается так, чтобы войти можно было только при наличии и ключа, и пароля.
 Оставим вход под root (решение, несомненно, спорное) -- по умолчанию он разрешен, только добавим требование публичного ключа.
 
 Нестандартный порт недостаточно прописать в /etc/ssh/sshd_config в строчке Port. 
@@ -820,7 +821,7 @@ Notes:
 Перезапустим сервисы, проверим::
     
     systemctl restart sshd
-    lsof -i  # if installed
+    lsof -i  # if lsof is installed
     firewall-cmd --reload
     firewall-cmd --list-services  # shoud be ssh-custom only
 
@@ -838,7 +839,7 @@ Notes:
     systemctl restart sshd
 
 Теперь можно войти без пароля, если есть ключ, и с паролем, если ключа нет.
-Это не совсем то, что мы хотели. Нам надо было, чтобы для входа ключ был обязателен.
+Это не совсем то, что мы хотели. Нам надо было, чтобы пароль для входа был обязателен.
 Для этого необходимо в файл /etc/ssh/sshd_config добавить строчку::
     
     AuthenticationMethods "publickey,password"
@@ -868,12 +869,12 @@ Notes:
 * https://wiki.centos.org/HowTos/Network/SecuringSSH
 * https://man.openbsd.org/sshd_config.5
 </t>
-<t tx="avidclam.20200117162449.1">На машине kdc::
+<t tx="avidclam.20200117162449.1">На машине ``kdc``::
     
     dnf install krb5-server
     vi /var/kerberos/krb5kdc/kdc.conf  # change realm
     vi /var/kerberos/krb5kdc/kadm5.acl  # change realm
-    vi /etc/krb5.conf  # change realm and kdc fqdn
+    vi /etc/krb5.conf  # set up realm and kdc fqdn
     kdb5_util create -s -r MYNET  # master password here!
     
 Note:
@@ -890,6 +891,7 @@ Note:
     systemctl start kadmin
     firewall-cmd --add-service=kerberos --permanent
     firewall-cmd --add-service=kadmin --permanent
+    firewall-cmd --add-service=kpasswd --permanent
     firewall-cmd --reload
 
 Создаем принципалов с помощью утилиты ``kadmin.local``. Далее команды внутри утилиты::
@@ -905,10 +907,96 @@ Note:
 * https://codingbee.net/rhce/rhce-kerberos
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/configuring_a_kerberos_5_server
 </t>
-<t tx="avidclam.20200117170942.1">На машине server, куда мы должны будем заходить через ssh с авторизацией в Kerberos::
+<t tx="avidclam.20200117170942.1">На машине ``server``, куда мы должны будем заходить через ssh с авторизацией в Kerberos,
+нужно создать пользователя, например, ``myuser`` и запретить соединения под root::
     
+    useradd myuser
+    passwd -l myuser  # krb5 password only
     dnf install krb5-workstation
 
-Нужно скопировать файл /etc/krb5.conf на server.</t>
+Нужно скопировать файл /etc/krb5.conf на server и настроить sshd.
+Файл /etc/ssh/sshd_config будет выглядеть примерно так::
+    
+    HostKey /etc/ssh/ssh_host_rsa_key
+    HostKey /etc/ssh/ssh_host_ecdsa_key
+    HostKey /etc/ssh/ssh_host_ed25519_key
+    SyslogFacility AUTHPRIV
+    PermitRootLogin no
+    AuthorizedKeysFile      .ssh/authorized_keys
+    PasswordAuthentication yes
+    ChallengeResponseAuthentication no
+    KerberosAuthentication yes
+    KerberosOrLocalPasswd yes
+    GSSAPIAuthentication no
+    GSSAPICleanupCredentials no
+    UsePAM yes
+    X11Forwarding no
+
+Перезапустим sshd::
+    
+    systemctl restart sshd
+    
+Теперь при входе по ssh пароли будут проверяться в kerberos. Конфигурировать рабочую станцию ws не потребовалось.
+
+Кстати, после входа на server можно проверить работу сервиса смены пароля kerberos::
+    
+    kpasswd
+
+</t>
+<t tx="avidclam.20200118194844.1">Для того, чтобы не просто проверять пароль через Kerberos, а иметь возможность, 
+однажды авторизовавшись, входить без пароля, пока действует ticket, нужны другие настройки.
+
+Сначала нужно внести ``server`` в KDC, запустив ``kadmin`` на машине server и задав следующие команды::
+    
+    addprinc -randkey host/server.mynet
+    ktadd host/server.mynet
+
+Затем установить SSSD::
+    
+    dns install sssd
+
+и настроить, создав файл /etc/sssd/sssd.conf::
+    
+    [sssd]
+        services = nss, pam
+        domains = MYNET
+    
+    [domain/MYNET]
+        id_provider = files
+        auth_provider = krb5
+        krb5_realm = MYNET
+        krb5_server = kdc.mynet
+        krb5_validate = true
+
+Файл /etc/ssh/sshd_config нужно поменять таким образом, чтобы работала не встроенная авторизация Kerberos, а внешняя::
+    
+    HostKey /etc/ssh/ssh_host_rsa_key
+    HostKey /etc/ssh/ssh_host_ecdsa_key
+    HostKey /etc/ssh/ssh_host_ed25519_key
+    SyslogFacility AUTHPRIV
+    PermitRootLogin no
+    AuthorizedKeysFile      .ssh/authorized_keys
+    PasswordAuthentication yes
+    ChallengeResponseAuthentication no
+    #KerberosAuthentication yes
+    #KerberosOrLocalPasswd yes
+    GSSAPIAuthentication yes
+    GSSAPICleanupCredentials yes
+    UsePAM yes
+    X11Forwarding no
+
+Далее::
+    
+    chmod 600 /etc/sssd/sssd.conf
+    systemctl start sssd
+    systemctl restart sshd
+
+На рабочей станции ``ws`` необходимо также установить ``krb5-workstation``, скопировать содержимое /etc/krb5.conf и аналогично внести рабочую станцию в KDC с помощью kadmin.
+Теперь вход по ssh нужно проводить в два этапа::
+    
+    kinit
+    ssh server
+
+</t>
 </tnodes>
 </leo_file>
