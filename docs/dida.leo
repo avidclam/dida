@@ -76,7 +76,7 @@
 </v>
 </v>
 </v>
-<v t="avidclam.20200116172244.1"><vh>Kerberos-авторизация</vh>
+<v t="avidclam.20200116172244.1"><vh>@rst kerberos</vh>
 <v t="avidclam.20200117131847.1"><vh>Защищаем SSHD</vh></v>
 <v t="avidclam.20200117162449.1"><vh>Настраиваем KDC</vh></v>
 <v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
@@ -298,6 +298,7 @@ autosphinx --- скрипт для livereload
    leo
    python
    redhat
+   kerberos
    linux
    useful-url
    autosphinx
@@ -787,7 +788,10 @@ Notes:
     
     for f in $(find /sys/devices -name eth0); do udevadm info $f; done
 </t>
-<t tx="avidclam.20200116172244.1">Итак, есть машины ``kdc``, ``server`` и ``ws``. Домен ``mynet``, dns имеется. 
+<t tx="avidclam.20200116172244.1">Kerberos-авторизация
+====================
+
+Итак, есть машины ``kdc``, ``server`` и ``ws``. Домен ``mynet``, dns имеется. 
 
 Требуется настроить так, чтобы с рабочей станции ws можно было через ssh войти на server, авторизовавшись через Kerberos, установленный на kdc. Чтобы приблизить задачу к реальности, добавим недефолтные настройки sshd.
 </t>

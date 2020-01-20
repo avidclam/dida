@@ -22,6 +22,7 @@
    leo
    python
    redhat
+   kerberos
    linux
    useful-url
    autosphinx
