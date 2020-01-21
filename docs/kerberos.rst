@@ -98,15 +98,14 @@ Kerberos-авторизация
     vi /var/kerberos/krb5kdc/kadm5.acl  # change realm
     vi /etc/krb5.conf  # set up realm and kdc fqdn
     kdb5_util create -s -r MYNET  # master password here!
-    
-Note:
-    
-    Для замены в vi можно использовать команды::
+
+Кстати, для замены в vi можно использовать команды::
 
     :%s/EXAMPLE\.COM/MYNET/g
     :%s/example\.com/mynet/g
 
 Запускаемся::
+    
     systemctl enable krb5kdc
     systemctl enable kadmin
     systemctl start krb5kdc
