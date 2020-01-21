@@ -72,8 +72,23 @@
 <v t="avidclam.20200113161640.1"><vh>Замечания про модули и репозитории</vh></v>
 <v t="avidclam.20200113172040.1"><vh>Запускать задания по расписанию</vh></v>
 <v t="avidclam.20200114163212.1"><vh>Замечания про grub2</vh></v>
+<v t="avidclam.20200120152844.1"><vh>Диски и разделы</vh></v>
 <v t="avidclam.20200114115231.1"><vh>Разное</vh></v>
 </v>
+</v>
+</v>
+<v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
+<v t="avidclam.20200115113137.1"><vh>Магия чисел</vh>
+<v t="avidclam.20191227103823.1"><vh>Виртуальные машины</vh></v>
+<v t="avidclam.20200115113333.1"><vh>Нестандарт</vh></v>
+</v>
+<v t="avidclam.20200121105911.1"><vh>Мало энтропии</vh></v>
+<v t="avidclam.20191226145846.1"><vh>Что происходит?</vh>
+<v t="avidclam.20200116163831.1"><vh>Что это за устройство?</vh></v>
+<v t="avidclam.20191226145905.1"><vh>Watch</vh></v>
+</v>
+<v t="avidclam.20191112105856.1"><vh>Bash</vh>
+<v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
 </v>
 </v>
 <v t="avidclam.20200116172244.1"><vh>@rst kerberos</vh>
@@ -82,20 +97,8 @@
 <v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
 <v t="avidclam.20200118194844.1"><vh>Доменный вход</vh></v>
 </v>
-<v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
-<v t="avidclam.20200115113137.1"><vh>Магия чисел</vh>
-<v t="avidclam.20191227103823.1"><vh>Виртуальные машины</vh></v>
-<v t="avidclam.20200115113333.1"><vh>Нестандарт</vh></v>
-</v>
-<v t="avidclam.20200121105911.1"><vh>Мало энтропии</vh></v>
-<v t="avidclam.20200120152844.1"><vh>Диски и разделы</vh></v>
-<v t="avidclam.20191226145846.1"><vh>Что происходит?</vh>
-<v t="avidclam.20200116163831.1"><vh>Что это за устройство?</vh></v>
-<v t="avidclam.20191226145905.1"><vh>Watch</vh></v>
-</v>
-<v t="avidclam.20191112105856.1"><vh>Bash</vh>
-<v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
-</v>
+<v t="avidclam.20200121171554.1"><vh>@rst selinux</vh>
+<v t="avidclam.20200121171648.1"><vh>Введение в SELinux</vh></v>
 </v>
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
@@ -300,8 +303,9 @@ autosphinx --- скрипт для livereload
    leo
    python
    redhat
-   kerberos
    linux
+   kerberos
+   selinux
    useful-url
    autosphinx
 </t>
@@ -1004,7 +1008,37 @@ Notes:
     ssh server
 
 </t>
-<t tx="avidclam.20200120152844.1"></t>
+<t tx="avidclam.20200120152844.1">Последовательность при работе со стандартными разделами диска: fdisk, mkfs, mount.
+
+Для LVM::
+    
+    fdisk
+    pvcreate  # Physical Volume
+    pvs
+    vgcreate  -s 16M  # Volume Group with custom PE size
+    vgs
+    lvcreate  # Logical Volume
+    lvs
+    mkfs
+    mount
+    vgextend  # Extend VG
+    lvextend  # Extend LV
+
+У команды ``lvcreate`` опция ``-ll`` предлагает интересные возможности, например::
+    
+    lvcreate -n lvname -l 20 vsname  # size = 20 PEs
+    lvcreate -n lvname -l 100%FREE vsname  # size = все свободное пространство
+    lvcreate -n lvname -l 60%VG vsname  # size = 60% размера VG
+
+Полезные утилиты:
+
+* ``lsblk`` --- list block devices
+* ``blkid`` --- locate/print block device attributes
+* ``partprobe`` --- inform the OS of partition table changes
+* ``cat /proc/partitions`` --- verify change
+* ``mkswap`` и ``swapon`` для создания и активации swap
+* ``fsadm`` --- utility to resize or check filesystem on a device
+</t>
 <t tx="avidclam.20200121105911.1">Наиболее неприятный симптом недостатка энтропии в системе: невозможно войти по ssh пока не залогинишься с консоли.
 
 Проверить текущий уровень энтропии можно командой::
@@ -1020,6 +1054,32 @@ Notes:
     journalctl -u rngd
 
 Часто еще устанавливают `haveged &lt;http://www.issihosts.com/haveged&gt;`_, но он не входит в стандартный набот пакетов RHEL/CentOS, и требует `EPEL &lt;https://fedoraproject.org/wiki/EPEL&gt;`_.
+</t>
+<t tx="avidclam.20200121171554.1">Ниже конспект документации RHEL8 --- *Using SELinux*.</t>
+<t tx="avidclam.20200121171648.1">SELinux реализует MAC (Mandatory Access Control).
+Задача --- иметь возможность настроить политики вида "*субъекту* (не) разрешено над *объектом* *действие*", например, "веб-сервер не может читать файлы в домашних директориях пользователей".
+ 
+С каждым процессом или системным ресурсом ассоциирован *SELinux context* a.k.a. *label*.
+Контексты используются в *правилах*, которые определяют, как процессам разрешено взаимодействовать друг с другом и с ресурсами. Правила объединяются в *политики* SELinux, которые, кстати, применяются **после** традиционных политик доступа. Действие разрешается только тогда, когда существует политика, явно его разрешающая.
+
+Контекст состоит из user, role, type и security level. 
+Политики чаще опираются на type, а не на контекст целиком.
+Название типа заканчивается на **_t**. Пример::
+    
+    httpd_t  # Web server
+    http_port_t  # Web server port
+    httpd_sys_content  # Web server content in /var/www/html/
+    tmp_t  # content of /tmp and /var/tmp
+
+Контексту httpd_t разрешен ряд действий с контекстом httpd_sys_content. Например, таких::
+    
+    allow httpd_t httpd_sys_content_t:dir { getattr ioctl lock open read search };
+    allow httpd_t httpd_sys_content_t:file { getattr ioctl lock map open read };
+    
+В этом можно убедиться::
+    
+    dnf install setools-console
+    sesearch --allow | grep httpd_t | grep http_sys_content_t
 </t>
 </tnodes>
 </leo_file>

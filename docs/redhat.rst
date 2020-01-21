@@ -430,6 +430,40 @@ Notes:
 и для изменения параметров запуска ядра нужно редактировать 
 непосредственно conf-файл в директории ``/boot/loader/entries``.
 
+Диски и разделы
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Последовательность при работе со стандартными разделами диска: fdisk, mkfs, mount.
+
+Для LVM::
+    
+    fdisk
+    pvcreate  # Physical Volume
+    pvs
+    vgcreate  -s 16M  # Volume Group with custom PE size
+    vgs
+    lvcreate  # Logical Volume
+    lvs
+    mkfs
+    mount
+    vgextend  # Extend VG
+    lvextend  # Extend LV
+
+У команды ``lvcreate`` опция ``-ll`` предлагает интересные возможности, например::
+    
+    lvcreate -n lvname -l 20 vsname  # size = 20 PEs
+    lvcreate -n lvname -l 100%FREE vsname  # size = все свободное пространство
+    lvcreate -n lvname -l 60%VG vsname  # size = 60% размера VG
+
+Полезные утилиты:
+
+* ``lsblk`` --- list block devices
+* ``blkid`` --- locate/print block device attributes
+* ``partprobe`` --- inform the OS of partition table changes
+* ``cat /proc/partitions`` --- verify change
+* ``mkswap`` и ``swapon`` для создания и активации swap
+* ``fsadm`` --- utility to resize or check filesystem on a device
+
 Разное
 ^^^^^^^^^^^^
 
