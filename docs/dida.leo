@@ -98,7 +98,10 @@
 <v t="avidclam.20200118194844.1"><vh>Доменный вход</vh></v>
 </v>
 <v t="avidclam.20200121171554.1"><vh>@rst selinux</vh>
-<v t="avidclam.20200121171648.1"><vh>Введение в SELinux</vh></v>
+<v t="avidclam.20200121171648.1"><vh>Введение</vh></v>
+<v t="avidclam.20200122144158.1"><vh>Режимы</vh></v>
+<v t="avidclam.20200122153726.1"><vh>Пример</vh></v>
+<v t="avidclam.20200123114749.1"><vh>Booleans</vh></v>
 </v>
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
@@ -309,12 +312,7 @@ autosphinx --- скрипт для livereload
    useful-url
    autosphinx
 </t>
-<t tx="avidclam.20191111122801.1">Указатели и поиск
-=================
-
-* :ref:`search`
-
-Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
+<t tx="avidclam.20191111122801.1">Ключевые слова: Linux, Python, Sphinx, reStructuredText</t>
 <t tx="avidclam.20191112105836.1">Linux, разное
 =============</t>
 <t tx="avidclam.20191112105856.1"></t>
@@ -1039,7 +1037,7 @@ Notes:
 * ``mkswap`` и ``swapon`` для создания и активации swap
 * ``fsadm`` --- utility to resize or check filesystem on a device
 </t>
-<t tx="avidclam.20200121105911.1">Наиболее неприятный симптом недостатка энтропии в системе: невозможно войти по ssh пока не залогинишься с консоли.
+<t tx="avidclam.20200121105911.1">Наиболее загадочный симптом недостатка энтропии в системе: невозможно войти по ssh пока не залогинишься с консоли.
 
 Проверить текущий уровень энтропии можно командой::
     
@@ -1080,6 +1078,64 @@ Notes:
     
     dnf install setools-console
     sesearch --allow | grep httpd_t | grep http_sys_content_t
+</t>
+<t tx="avidclam.20200122144158.1">В SELinux три режима: ``enforcing`` "вкл", ``permissive`` "понарошку": пишет в журнал, но не блокирует, ``disabled`` "выкл".
+
+Текущий режим отображается командой ``getenforce``. Статус --- ``sestatus``.
+
+Переключение в Permissive: ``setenforce 0``, постоянное::
+    
+    # in /etc/selinux/config:
+    SELINUX=permissive
+    SELINUXTYPE=targeted
+    #
+    reboot
+
+Переключение в Enabled: ``setenforce 1``, постоянное::
+    
+    fixfiles -F onboot  # создаст /.autorelabel для переразметки файлов, созданных без меток SELinux
+    # in /etc/selinux/config:
+    SELINUX=enforcing
+    SELINUXTYPE=targeted
+    #
+    reboot
+
+Возникающие при включении SELinux ошибки можно отследить в audit log утилитой ``ausearch``.
+Также полезен пакет setroubleshoot-server.
+
+</t>
+<t tx="avidclam.20200122153726.1">Требуется настроить работу Apache httpd на порту 3131 и предоставить досуп к /var/test_www.
+
+Note:
+    
+    Потребуется пакет policycoreutils-python-utils
+
+Проверяем, на каких портах SELinux ожидает встретить httpd, добавляем нужный нестандартный порт, а затем применяем контекст стандартной директории /var/www к нестандартной /var/test_www::
+    
+    semanage port -l | grep http
+    semanage port -a -t http_port_t -p tcp 3131
+    #
+    matchpathcon /var/www/html
+    semanage fcontext -a -e /var/www /var/test_www
+    restorecon -Rv /var/
+
+Изменить контекст можно также командой ``chcon``. 
+Однако результат не сохранится, если будет запушен relabel системы или команда restorecon.
+
+Посмотреть, из-за чего в приложениях возникают проблемы SELinux, можно командой ``sealert -l "*"``
+
+Посмотреть контекст SELinux для процессов и директорий можно командами::
+    
+    ps -eZ
+    ls -ldZ
+</t>
+<t tx="avidclam.20200123114749.1">Важную роль в настройке SELinux играют переменные-выключатели --- "booleans", принимающие значение 0 или 1.
+
+Список всех переменных доступен по команде ``getsebool -a``. 
+
+Установка переменной проводится командой ``setsebool``. Например::
+    
+    setsebool -P samba_export_all_rw 1
 </t>
 </tnodes>
 </leo_file>

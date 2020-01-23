@@ -28,10 +28,5 @@
    useful-url
    autosphinx
 
-Указатели и поиск
-=================
-
-* :ref:`search`
-
 Ключевые слова: Linux, Python, Sphinx, reStructuredText
 
