@@ -22,6 +22,7 @@
    leo
    python
    redhat
+   desktop
    linux
    kerberos
    selinux
