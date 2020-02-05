@@ -179,7 +179,7 @@ Kerberos-авторизация
 
 Затем установить SSSD::
     
-    dns install sssd
+    dnf install sssd
 
 и настроить, создав файл /etc/sssd/sssd.conf::
     

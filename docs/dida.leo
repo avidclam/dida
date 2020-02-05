@@ -973,7 +973,7 @@ Notes:
 
 Затем установить SSSD::
     
-    dns install sssd
+    dnf install sssd
 
 и настроить, создав файл /etc/sssd/sssd.conf::
     
@@ -1065,7 +1065,10 @@ Notes:
 
 Часто еще устанавливают `haveged &lt;http://www.issihosts.com/haveged&gt;`_, но он не входит в стандартный набот пакетов RHEL/CentOS, и требует `EPEL &lt;https://fedoraproject.org/wiki/EPEL&gt;`_.
 </t>
-<t tx="avidclam.20200121171554.1">Ниже конспект документации RHEL8 --- *Using SELinux*.</t>
+<t tx="avidclam.20200121171554.1">SELinux
+=======
+
+Ниже конспект документации RHEL8 --- *Using SELinux*.</t>
 <t tx="avidclam.20200121171648.1">SELinux реализует MAC (Mandatory Access Control).
 Задача --- иметь возможность настроить политики вида "*субъекту* (не) разрешено над *объектом* *действие*", например, "веб-сервер не может читать файлы в домашних директориях пользователей".
  

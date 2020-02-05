@@ -1,5 +1,8 @@
 .. rst3: filename: selinux
 
+SELinux
+=======
+
 Ниже конспект документации RHEL8 --- *Using SELinux*.
 
 Введение
