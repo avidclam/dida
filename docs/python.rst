@@ -70,3 +70,22 @@ Fixtures
         captured = capsys.readouterr()
         assert captured.out == msg + "\n"
 
+Версии и публикация
+++++++++++++++++++++++++++++++++++++
+
+Версия --- это tag. Например, версия 1.0.15 --- это тэг v1.0.15
+
+Для выпуска версии можно делать специальный коммит, куда войдут только изменения номера версии в __init__.py и/или setup.py и сразу помечать его, например::
+    
+    git tag -a v1.0.15 -m 'version 1.0.15'
+
+Далее, как обычно, ``git push`` и не забыть все опубликовать::
+    
+    rm -rf dist
+    python setup.py sdist bdist_wheel
+    twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+    twine upload dist/*
+
+
+Полезная статья на тему: `Build Your First Open Source Python Project <https://towardsdatascience.com/build-your-first-open-source-python-project-53471c9942a7>`_.
+

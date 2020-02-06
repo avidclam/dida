@@ -50,6 +50,7 @@
 <v t="avidclam.20191113104456.1"><vh>Проверка исключений</vh></v>
 <v t="avidclam.20191113212016.1"><vh>Перехват stdout/stderr</vh></v>
 </v>
+<v t="avidclam.20200206165737.1"><vh>Версии и публикация</vh></v>
 </v>
 <v t="avidclam.20200109092449.1"><vh>@rst redhat</vh>
 <v t="avidclam.20200109092637.1"><vh>Установка</vh>
@@ -82,6 +83,18 @@
 <v t="avidclam.20200124140205.1"><vh>Настройка</vh></v>
 <v t="avidclam.20200206115508.1"><vh>Flatpak и Podman</vh></v>
 </v>
+<v t="avidclam.20200116172244.1"><vh>@rst kerberos</vh>
+<v t="avidclam.20200117131847.1"><vh>Защищаем SSHD</vh></v>
+<v t="avidclam.20200117162449.1"><vh>Настраиваем KDC</vh></v>
+<v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
+<v t="avidclam.20200118194844.1"><vh>Доменный вход</vh></v>
+</v>
+<v t="avidclam.20200121171554.1"><vh>@rst selinux</vh>
+<v t="avidclam.20200121171648.1"><vh>Введение</vh></v>
+<v t="avidclam.20200122144158.1"><vh>Режимы</vh></v>
+<v t="avidclam.20200122153726.1"><vh>Пример</vh></v>
+<v t="avidclam.20200123114749.1"><vh>Booleans</vh></v>
+</v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20200115113137.1"><vh>Магия чисел</vh>
 <v t="avidclam.20191227103823.1"><vh>Виртуальные машины</vh></v>
@@ -95,18 +108,6 @@
 <v t="avidclam.20191112105856.1"><vh>Bash</vh>
 <v t="avidclam.20191112105906.1"><vh>Работа с фоновыми процессами</vh></v>
 </v>
-</v>
-<v t="avidclam.20200116172244.1"><vh>@rst kerberos</vh>
-<v t="avidclam.20200117131847.1"><vh>Защищаем SSHD</vh></v>
-<v t="avidclam.20200117162449.1"><vh>Настраиваем KDC</vh></v>
-<v t="avidclam.20200117170942.1"><vh>Настраиваем server</vh></v>
-<v t="avidclam.20200118194844.1"><vh>Доменный вход</vh></v>
-</v>
-<v t="avidclam.20200121171554.1"><vh>@rst selinux</vh>
-<v t="avidclam.20200121171648.1"><vh>Введение</vh></v>
-<v t="avidclam.20200122144158.1"><vh>Режимы</vh></v>
-<v t="avidclam.20200122153726.1"><vh>Пример</vh></v>
-<v t="avidclam.20200123114749.1"><vh>Booleans</vh></v>
 </v>
 <v t="avidclam.20191108144631.1"><vh>@rst useful-url</vh>
 <v t="avidclam.20191108144810.1"><vh>reStructuredText</vh></v>
@@ -319,9 +320,9 @@ autosphinx --- скрипт для livereload
    python
    redhat
    desktop
-   linux
    kerberos
    selinux
+   linux
    useful-url
    autosphinx
 </t>
@@ -1214,5 +1215,20 @@ Firefox: настраиваем домашнюю страницу, поиск, �
     # echo "user.max_user_namespaces=28633" &gt; /etc/sysctl.d/userns.conf
     # sysctl -p /etc/sysctl.d/userns.conf
 </t>
+<t tx="avidclam.20200206165737.1">Версия --- это tag. Например, версия 1.0.15 --- это тэг v1.0.15
+
+Для выпуска версии можно делать специальный коммит, куда войдут только изменения номера версии в __init__.py и/или setup.py и сразу помечать его, например::
+    
+    git tag -a v1.0.15 -m 'version 1.0.15'
+
+Далее, как обычно, ``git push`` и не забыть все опубликовать::
+    
+    rm -rf dist
+    python setup.py sdist bdist_wheel
+    twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+    twine upload dist/*
+
+
+Полезная статья на тему: `Build Your First Open Source Python Project &lt;https://towardsdatascience.com/build-your-first-open-source-python-project-53471c9942a7&gt;`_.</t>
 </tnodes>
 </leo_file>

@@ -23,9 +23,9 @@
    python
    redhat
    desktop
-   linux
    kerberos
    selinux
+   linux
    useful-url
    autosphinx
 
