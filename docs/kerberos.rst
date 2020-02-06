@@ -132,14 +132,18 @@ Kerberos-авторизация
 +++++++++++++++++++++++++++++
 
 На машине ``server``, куда мы должны будем заходить через ssh с авторизацией в Kerberos,
-нужно создать пользователя, например, ``myuser`` и запретить соединения под root::
+нужно создать пользователя, например, ``myuser`` и исключить обычный логин с паролем::
     
     useradd myuser
     passwd -l myuser  # krb5 password only
     dnf install krb5-workstation
 
-Нужно скопировать файл /etc/krb5.conf на server и настроить sshd.
-Файл /etc/ssh/sshd_config будет выглядеть примерно так::
+Далее нужно отредактировать файл /etc/krb5.conf на server так,
+чтобы его содержание совпадало с соответствующим файлом на kdc.
+Осторожнее с заменой файла, это скорее всего нарушит контекст SELinux
+и возникнут проблемы доступа!
+
+Настроим SSHD. Файл /etc/ssh/sshd_config будет выглядеть примерно так::
     
     HostKey /etc/ssh/ssh_host_rsa_key
     HostKey /etc/ssh/ssh_host_ecdsa_key

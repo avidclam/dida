@@ -80,6 +80,7 @@
 <v t="avidclam.20200124093843.1"><vh>@rst desktop</vh>
 <v t="avidclam.20200124094323.1"><vh>Установка</vh></v>
 <v t="avidclam.20200124140205.1"><vh>Настройка</vh></v>
+<v t="avidclam.20200206115508.1"><vh>Flatpak и Podman</vh></v>
 </v>
 <v t="avidclam.20191112105836.1"><vh>@rst linux</vh>
 <v t="avidclam.20200115113137.1"><vh>Магия чисел</vh>
@@ -928,14 +929,18 @@ Notes:
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/configuring_a_kerberos_5_server
 </t>
 <t tx="avidclam.20200117170942.1">На машине ``server``, куда мы должны будем заходить через ssh с авторизацией в Kerberos,
-нужно создать пользователя, например, ``myuser`` и запретить соединения под root::
+нужно создать пользователя, например, ``myuser`` и исключить обычный логин с паролем::
     
     useradd myuser
     passwd -l myuser  # krb5 password only
     dnf install krb5-workstation
 
-Нужно скопировать файл /etc/krb5.conf на server и настроить sshd.
-Файл /etc/ssh/sshd_config будет выглядеть примерно так::
+Далее нужно отредактировать файл /etc/krb5.conf на server так,
+чтобы его содержание совпадало с соответствующим файлом на kdc.
+Осторожнее с заменой файла, это скорее всего нарушит контекст SELinux
+и возникнут проблемы доступа!
+
+Настроим SSHD. Файл /etc/ssh/sshd_config будет выглядеть примерно так::
     
     HostKey /etc/ssh/ssh_host_rsa_key
     HostKey /etc/ssh/ssh_host_ecdsa_key
@@ -1135,7 +1140,7 @@ Note:
     restorecon -Rv /var/
 
 Изменить контекст можно также командой ``chcon``. 
-Однако результат не сохранится, если будет запушен relabel системы или команда restorecon.
+Однако результат не сохранится, если будет запущен relabel системы или команда restorecon.
 
 Посмотреть, из-за чего в приложениях возникают проблемы SELinux, можно командой ``sealert -l "*"``
 
@@ -1194,11 +1199,20 @@ Note:
 Firefox: настраиваем домашнюю страницу, поиск, запрос паролей и т.п.
 
 Затем можно зайти на RealVNC, скачать realvnc-vnc-server и установить его с помощью dnf.
-При запуске он запросит root пароль, после чего будет показывать ошибку "VNC Server is not licenced". Нужно найти на нажать кнопку Resolve, задать имя-пароль пользователя realvnc, задать пароль для сервера, подтвердить все root-паролем и все, можно соединяться через VNC.
+При запуске он запросит root пароль, после чего будет показывать ошибку "VNC Server is not licenced". Нужно найти и нажать кнопку Resolve, задать имя-пароль пользователя realvnc, задать пароль для сервера, подтвердить все root-паролем и все, можно соединяться через VNC.
 
 Можно поменять разрешение виртуальной машины на нестандартное, например, 1280x720.
 
-Установка дополнительного софта возможна через flatpak. Для его активации нужно зайти на страницу https://flatpak.org/setup/CentOS/, скачать Flathub repository file, установить его, и можно пользоваться менеджером Software для установки.
+</t>
+<t tx="avidclam.20200206115508.1">Установка дополнительного софта возможна через flatpak. Для его активации нужно зайти на страницу https://flatpak.org/setup/CentOS/, скачать Flathub repository file, установить его, и можно пользоваться менеджером Software для установки.
+
+Запуск докеровских контейнеров работает через podman, причем под обычным пользователем (имеется в виду версия Centos 8.1, с учетом ограничений `Shortcomings of Rootless Podman &lt;https://github.com/containers/libpod/blob/master/rootless.md&gt;`_).
+
+Для установки podman достаточно::
+    
+    # dnf install podman
+    # echo "user.max_user_namespaces=28633" &gt; /etc/sysctl.d/userns.conf
+    # sysctl -p /etc/sysctl.d/userns.conf
 </t>
 </tnodes>
 </leo_file>
