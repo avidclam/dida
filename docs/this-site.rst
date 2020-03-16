@@ -123,7 +123,7 @@ conf.py
 .. code-block:: python
 
     project = 'Project Name'
-    copyright = '2019, Project Author'
+    copyright = '2020, Project Author'
     author = 'Project Author'
     release = '0.1.0'
     master_doc = 'index'

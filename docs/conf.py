@@ -1,5 +1,5 @@
 project = 'dida.avidclam.com'
-copyright = '2019, Александр Михайлов'
+copyright = '2020, Александр Михайлов'
 author = 'Александр Михайлов'
 release = '0.1.0'
 master_doc = 'index'
