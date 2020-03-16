@@ -10,13 +10,13 @@
 ++++++++++++++++++
 
 На подготовленую виртуалку (4 CPU, 6G RAM, 2x24G HDD) ставим CentOS 8.1 в конфигурации Workstation. Особенности:
-    
+
 * Во время первой загрузки с iso в параметры ядра добавляем ``net.ifnames=0`` и убираем ``quiet``.
 * Принимаем дефолтное разбиение первого диска, второй диск в процессе установки не трогаем.
 * Проверяя разбиение, можно поменять предложенное имя LWM Volume Group на ``vg0``.
 * Пользователя не создаем.
 
-После перезагрузки:
+После перезагрузки::
     
     vi /etc/default/grub  # удаляем rhgb quiet в GRUB_CMDLINE_LINUX, оставляем net.ifnames=0
     grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
@@ -65,4 +65,20 @@ Flatpak и Podman
     # dnf install podman
     # echo "user.max_user_namespaces=28633" > /etc/sysctl.d/userns.conf
     # sysctl -p /etc/sysctl.d/userns.conf
+
+Расширение home
++++++++++++++++++++++++++
+
+Во время установки под ``/home`` было выделено 8G, но очень скоро выяснилось, что этого мало. Проверим::
+    
+    df -h /home
+
+Место на диске оставлялось про запас, в чем можно убедиться::
+    
+    vgs
+    vgdisplay vg1
+
+Не мудрствуя, отдадим все место на диске под home, сразу с расширением файловой системы::
+    
+    lvextend -r -l +100%FREE /dev/mapper/vg1-home
 
