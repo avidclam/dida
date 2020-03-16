@@ -1228,7 +1228,12 @@ Firefox: настраиваем домашнюю страницу, поиск, �
     twine upload --repository-url https://test.pypi.org/legacy/ dist/*
     twine upload dist/*
 
+Полезная статья на тему: `Build Your First Open Source Python Project &lt;https://towardsdatascience.com/build-your-first-open-source-python-project-53471c9942a7&gt;`_.
 
-Полезная статья на тему: `Build Your First Open Source Python Project &lt;https://towardsdatascience.com/build-your-first-open-source-python-project-53471c9942a7&gt;`_.</t>
+Если поторопился с назначением версии, то tag можно удалить::
+    
+    git push --delete origin v1.0.15
+    git tag -d v1.0.15
+</t>
 </tnodes>
 </leo_file>

@@ -86,6 +86,10 @@ Fixtures
     twine upload --repository-url https://test.pypi.org/legacy/ dist/*
     twine upload dist/*
 
-
 Полезная статья на тему: `Build Your First Open Source Python Project <https://towardsdatascience.com/build-your-first-open-source-python-project-53471c9942a7>`_.
+
+Если поторопился с назначением версии, то tag можно удалить::
+    
+    git push --delete origin v1.0.15
+    git tag -d v1.0.15
 
